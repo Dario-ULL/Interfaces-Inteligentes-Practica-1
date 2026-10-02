@@ -11,7 +11,7 @@ public class Ejercicio3 : MonoBehaviour
         Transform miTransform = GetComponent<Transform>();
         posicionActual = miTransform.position;
 
-        // Mostrar vector en pantalla / consola
+        // Mostrar vector en consola
         Debug.Log($"La posición actual de la esfera es: {posicionActual}");
     }
 }
