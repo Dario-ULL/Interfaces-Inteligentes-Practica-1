@@ -1,26 +1,39 @@
+using System.Collections;
 using UnityEngine;
 
 public class Ejercicio11 : MonoBehaviour
 {
-  [Header("Velocidades")]
-  [Tooltip("Velocidad de traslación hacia adelante/atrás")]
-  public float velocidadAvance = 5.0f;
+    [Header("Objetivo")]
+    [Tooltip("Referencia al Transform de la esfera")]
+    public Transform objetivoEsfera;
+    [Header("Configuración de Movimiento")]
+    [Tooltip("Velocidad constante de avance")]
+    public float speed = 3.0f;
 
-  [Tooltip("Velocidad de rotación en grados por segundo")]
-  public float velocidadGiro = 120.0f;
+    void Start()
+    {
+        if (objetivoEsfera == null)
+        {
+            GameObject esferaGO = GameObject.Find("Sphere");
+            if (esferaGO != null)
+            {
+                objetivoEsfera = esferaGO.transform;
+            }
+        }
+    }
 
-  [Header("Depuración")]
-  [Tooltip("Longitud del rayo guía en la vista Scene")]
-  public float longitudRayo = 2.5f;
-
-  void Update()
-  {
-      float inputGiro = Input.GetAxis("Horizontal");
-      float rotacionY = inputGiro * velocidadGiro * Time.deltaTime;
-      transform.Rotate(0f, rotacionY, 0f, Space.Self);
-      Vector3 direccionFrente = transform.forward;
-      Vector3 desplazamiento = direccionFrente * velocidadAvance * Time.deltaTime;
-      transform.Translate(desplazamiento, Space.World);
-      Debug.DrawRay(transform.position, direccionFrente * longitudRayo, Color.green);
-  }
+    void Update()
+    {
+        if (objetivoEsfera == null) return;
+        Vector3 objetivo = new Vector3(
+          objetivoEsfera.position.x,
+          transform.position.y,
+          objetivoEsfera.position.z
+        );
+        Vector3 direccion = objetivo - transform.position;
+        if (direccion.magnitude > 0.05f)
+        {
+            transform.Translate(direccion * speed * Time.deltaTime, Space.Self);
+        }
+    }
 }
